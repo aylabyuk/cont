@@ -5,7 +5,7 @@ import Typography from 'material-ui/Typography'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
-class AntennaAutocomplete extends Component {
+class ReceiverAutocomplete extends Component {
     state = {
         selected: {}
     };
@@ -22,28 +22,28 @@ class AntennaAutocomplete extends Component {
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <MyAutoComplete
                     setSelected={this.setSelected}
-                    label='Antenna' 
-                    hintText='Type antenna serial number' 
-                    list={this.props.data.antennas}
+                    label='Receiver' 
+                    hintText='Type receiver serial number' 
+                    list={this.props.data.Receivers}
                     primary='serialNumber'
                     secondary='partNumber'
                     />
 
-                    {this.state.selected.partNumber ? <Typography type="caption">{'PN: ' + this.state.selected.partNumber }</Typography> : null}
+                {this.state.selected.partNumber ? <Typography type="caption">{'PN: ' + this.state.selected.partNumber }</Typography> : null}
             </div>
         )
     }
 }
 
-const AntennaAutocompleteWithData = graphql(gql`
-    query AntennaList {
-        antennas:  allAntenna {
+const ReceiverAutocompleteWithData = graphql(gql`
+    query ReceiverList {
+        Receivers:  allReceiver {
             id
             serialNumber
             partNumber
         }
     }
 
-`)(AntennaAutocomplete)
+`)(ReceiverAutocomplete)
 
-export default AntennaAutocompleteWithData
+export default ReceiverAutocompleteWithData
