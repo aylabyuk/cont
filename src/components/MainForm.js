@@ -9,7 +9,7 @@ class MainForm extends Component {
         return (
             <Paper className={this.props.classes.rootpaper}>
                 <DateField />
-                <SiteAutocomplete classes={this.props.classes}/>
+                <SiteAutocomplete />
             </Paper>
         )
     }

@@ -4,7 +4,36 @@ import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import TextField from 'material-ui/TextField';
 import { MenuItem } from 'material-ui/Menu';
+import { ListItemText } from 'material-ui/List';
 import Paper from 'material-ui/Paper';
+import { withStyles } from 'material-ui/styles';
+
+const styles = theme => ({
+    container: {
+      flexGrow: 1,
+      position: 'relative',
+      height: 60,
+    },
+    suggestionsContainerOpen: {
+      position: 'absolute',
+      marginTop: theme.spacing.unit,
+      marginBottom: theme.spacing.unit * 3,
+      left: 0,
+      right: 0,
+    },
+    suggestion: {
+      display: 'block',
+    },
+    suggestionsList: {
+      margin: 0,
+      padding: 0,
+      listStyleType: 'none',
+    },
+    textField: {
+      width: '100%',
+    },
+  });
+  
 
 function renderInput(inputProps) {
     const { classes, autoFocus, value, ref, label, ...other } = inputProps;
@@ -50,7 +79,7 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
             );
             })}
         </div>
-        <small>{' : ' + sub}</small>
+        <ListItemText secondary={sub}/>
         </MenuItem>
     );
 }
@@ -89,8 +118,8 @@ function getSuggestions(value, list) {
 
 class MyAutoComplete extends Component {
     state = {
-       value: '',
-       suggestions: [],
+        value: '',
+        suggestions: [],
     };
 
     handleSuggestionsFetchRequested = ({ value }) => {
@@ -100,16 +129,26 @@ class MyAutoComplete extends Component {
     };
     
     handleSuggestionsClearRequested = () => {
-      this.setState({
-        suggestions: [],
-      });
+        this.setState({
+            suggestions: [],
+        });
     };
     
     handleChange = (event, { newValue }) => {
-      this.setState({
-        value: newValue,
-      });
+        
+        let x = this.props.list.filter(item => (item.name === newValue.toUpperCase() ))
+        if(x.length < 1) {
+            this.props.setSelected({})
+        }
+
+        this.setState({
+            value: newValue,
+        });
     };
+
+    handleSelected = (e, selected) => {
+        this.props.setSelected(selected.suggestion)
+    }
 
     render() {
         const { classes } = this.props;
@@ -122,6 +161,7 @@ class MyAutoComplete extends Component {
                         suggestionsList: classes.suggestionsList,
                         suggestion: classes.suggestion,
                     }}
+                onSuggestionSelected={this.handleSelected}
                 renderInputComponent={renderInput}
                 suggestions={this.state.suggestions}
                 onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
@@ -143,4 +183,4 @@ class MyAutoComplete extends Component {
 }
 
 
-export default MyAutoComplete
+export default withStyles(styles)(MyAutoComplete)

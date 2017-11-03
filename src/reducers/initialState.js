@@ -1,3 +1,5 @@
 export default {
-    stuff: []
+    continuousForm: {
+        selectedSite: {}
+    }
 };

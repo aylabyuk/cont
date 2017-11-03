@@ -1,19 +1,35 @@
 import React, { Component } from 'react'
-import TextField from 'material-ui/TextField'
 import MyAutoComplete from './MyAutoComplete'
+import Typography from 'material-ui/Typography'
 
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
 class SiteAutocomplete extends Component {
+    state = {
+        selected: {}
+    };
+
+    setSelected = (selected) => {
+        this.setState({
+            selected
+        })
+    }
+
     render() {
         return (
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <MyAutoComplete
-                    classes={this.props.classes} 
+                    setSelected={this.setSelected}
                     label='Site' 
                     hintText='Type sitename' 
                     list={this.props.data.sites}
+                    primary='name'
+                    secondary='location'
                     />
+
+                <Typography type="caption">{ this.state.selected.location }</Typography>
+            </div>
         )
     }
 }

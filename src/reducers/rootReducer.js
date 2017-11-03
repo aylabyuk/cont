@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux';
 import { reducer as formReducer } from 'redux-form'
-import stuff from './stuffReducer';
+import continuous from './continuousReducer';
 
 const rootReducer = combineReducers({
-  stuff,
+  continuous,
   form: formReducer
 });
 
