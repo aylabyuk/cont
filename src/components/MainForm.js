@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { reduxForm } from 'redux-form'
 import DateField from './formComponents/Datefield'
 import SiteAutocomplete from './formComponents/SiteAutocomplete'
+import AntennaAutocomplete from './formComponents/AntennaAutocomplete'
 import Paper from 'material-ui/Paper'
   
 class MainForm extends Component {
@@ -10,6 +11,7 @@ class MainForm extends Component {
             <Paper className={this.props.classes.rootpaper}>
                 <DateField />
                 <SiteAutocomplete />
+                {<AntennaAutocomplete />}
             </Paper>
         )
     }

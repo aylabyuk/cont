@@ -33,7 +33,9 @@ const styles = theme => ({
       width: '100%',
     },
   });
-  
+
+let primary = ''
+let secondary = ''
 
 function renderInput(inputProps) {
     const { classes, autoFocus, value, ref, label, ...other } = inputProps;
@@ -59,10 +61,10 @@ function renderInput(inputProps) {
 }
   
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-    const matches = match(suggestion.name, query);
-    const parts = parse(suggestion.name, matches);
+    const matches = match(suggestion[primary], query);
+    const parts = parse(suggestion[primary], matches);
 
-    const sub = suggestion.location
+    const sub = suggestion[secondary]
 
     return (
         <MenuItem selected={isHighlighted} component="div">
@@ -95,7 +97,7 @@ function renderSuggestionsContainer(options) {
 }
   
 function getSuggestionValue(suggestion) {
-    return suggestion.name;
+    return suggestion[primary];
 }
   
 function getSuggestions(value, list) {
@@ -106,7 +108,10 @@ function getSuggestions(value, list) {
     return inputLength === 0
         ? []
         : list.filter(suggestion => {
-            const keep = count < 5 && suggestion.name.toUpperCase().slice(0, inputLength) === inputValue;
+
+            if(!suggestion[primary]) { return 0 }
+            
+            const keep = count < 5 && suggestion[primary].toUpperCase().slice(0, inputLength) === inputValue;
 
             if (keep) {
                 count += 1;
@@ -124,7 +129,7 @@ class MyAutoComplete extends Component {
 
     handleSuggestionsFetchRequested = ({ value }) => {
         this.setState({
-            suggestions: getSuggestions(value, this.props.list),
+            suggestions: getSuggestions(value, this.props.list, this.props.primary),
         });
     };
     
@@ -136,13 +141,16 @@ class MyAutoComplete extends Component {
     
     handleChange = (event, { newValue }) => {
         
-        let x = this.props.list.filter(item => (item.name === newValue.toUpperCase() ))
+        let x = this.props.list.filter(item => (item[primary] === newValue.toUpperCase() ))
         if(x.length < 1) {
             this.props.setSelected({})
+        } else {
+            console.log(x)
+            this.props.setSelected(x[0])
         }
 
         this.setState({
-            value: newValue,
+            value: newValue.toUpperCase(),
         });
     };
 
@@ -152,6 +160,9 @@ class MyAutoComplete extends Component {
 
     render() {
         const { classes } = this.props;
+
+        primary = this.props.primary
+        secondary = this.props.secondary
 
         return (
             <Autosuggest
@@ -175,7 +186,8 @@ class MyAutoComplete extends Component {
                         placeholder: this.props.hintText,
                         value: this.state.value,
                         onChange: this.handleChange,
-                        label: this.props.label
+                        label: this.props.label,
+                        onBlur: this.handleBlur
                     }}
             />
         )
